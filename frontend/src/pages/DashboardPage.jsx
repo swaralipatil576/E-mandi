@@ -32,7 +32,7 @@ export default function DashboardPage() {
         const insightsRes = await fetchInsights();
         if(insightsRes) setInsights(insightsRes);
 
-        const invRes = await fetch('http://localhost:8080/api/inventory');
+        const invRes = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/inventory`);
         if (invRes.ok) {
             setInventory(await invRes.json());
         }

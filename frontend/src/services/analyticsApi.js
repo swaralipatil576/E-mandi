@@ -1,36 +1,36 @@
 export const getOverview = async () => {
     try {
-        const res = await fetch('http://localhost:8080/api/analytics/overview');
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/analytics/overview`);
         return await res.json();
     } catch (e) { return null; }
 };
 export const getCropPerformance = async () => {
     try {
-        const res = await fetch('http://localhost:8080/api/analytics/crop-performance');
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/analytics/crop-performance`);
         return await res.json();
     } catch (e) { return []; }
 };
 export const getInventory = async () => {
     try {
-        const res = await fetch('http://localhost:8080/api/analytics/inventory');
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/analytics/inventory`);
         return await res.json();
     } catch (e) { return []; }
 };
 export const getInsights = async () => {
     try {
-        const res = await fetch('http://localhost:8080/api/analytics/insights');
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/analytics/insights`);
         return await res.json();
     } catch (e) { return []; }
 };
 export const getForecast = async () => {
     try {
-        const res = await fetch('http://localhost:8080/api/analytics/forecast');
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/analytics/forecast`);
         return await res.json();
     } catch (e) { return null; }
 };
 export const chatWithAi = async (message) => {
     try {
-        const res = await fetch('http://localhost:8080/api/ai/chat', {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/ai/chat`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message })
         });

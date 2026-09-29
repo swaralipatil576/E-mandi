@@ -22,9 +22,9 @@ export default function ResourcesPage() {
     setLoading(true);
     try {
       const [resRes, reqRes, utilRes] = await Promise.all([
-        fetch('http://localhost:8080/api/resources'),
-        fetch('http://localhost:8080/api/resources/requests'),
-        fetch('http://localhost:8080/api/resources/utilization')
+        fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/resources`),
+        fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/resources/requests`),
+        fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/resources/utilization`)
       ]);
       setResources(await resRes.json());
       setRequests(await reqRes.json());
@@ -40,7 +40,7 @@ export default function ResourcesPage() {
     e.preventDefault();
     try {
       // Mock farmer ID 1
-      await fetch(`http://localhost:8080/api/resources/requests?farmerId=1&lotId=${reqLotId}&resourceType=${reqResourceType}&requiredCapacity=${reqCapacity}&preferredDate=${reqDate}T00:00:00`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/resources/requests?farmerId=1&lotId=${reqLotId}&resourceType=${reqResourceType}&requiredCapacity=${reqCapacity}&preferredDate=${reqDate}T00:00:00`, {
         method: 'POST'
       });
       setShowRequestForm(false);
@@ -52,7 +52,7 @@ export default function ResourcesPage() {
 
   const handleAllocate = async (reqId, resourceId) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/resources/requests/${reqId}/allocate?resourceId=${resourceId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/resources/requests/${reqId}/allocate?resourceId=${resourceId}`, {
         method: 'PUT'
       });
       if (!res.ok) {
@@ -68,7 +68,7 @@ export default function ResourcesPage() {
 
   const handleReject = async (reqId) => {
     try {
-      await fetch(`http://localhost:8080/api/resources/requests/${reqId}/reject`, { method: 'PUT' });
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/resources/requests/${reqId}/reject`, { method: 'PUT' });
       fetchData();
     } catch(err) {
       console.error(err);

@@ -14,8 +14,8 @@ export default function InventoryPage() {
     setLoading(true);
     try {
       const [dashRes, moveRes] = await Promise.all([
-        fetch('http://localhost:8080/api/inventory'),
-        fetch('http://localhost:8080/api/inventory/movements')
+        fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/inventory`),
+        fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'}/inventory/movements`)
       ]);
       const dashData = await dashRes.json();
       const moveData = await moveRes.json();
