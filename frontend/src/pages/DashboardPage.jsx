@@ -12,6 +12,9 @@ export default function DashboardPage() {
   const [myLots, setMyLots] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [insights, setInsights] = useState([]);
+  const [inventory, setInventory] = useState(null);
+
   useEffect(() => {
     async function loadData() {
       const [dashRes, marketRes, lotsRes] = await Promise.all([
@@ -23,6 +26,18 @@ export default function DashboardPage() {
       if (dashRes.success) setSummary(dashRes.data);
       if (marketRes.success) setMarketPrices(marketRes.data.slice(0, 4)); // Show top 4
       if (lotsRes.success) setMyLots(lotsRes.data.slice(0, 3)); // Show top 3
+      
+      try {
+        const fetchInsights = await import('../services/analyticsApi').then(m => m.getInsights);
+        const insightsRes = await fetchInsights();
+        if(insightsRes) setInsights(insightsRes);
+
+        const invRes = await fetch('http://localhost:8080/api/inventory');
+        if (invRes.ok) {
+            setInventory(await invRes.json());
+        }
+      } catch (e) {}
+
       setLoading(false);
     }
     loadData();
@@ -160,6 +175,51 @@ export default function DashboardPage() {
       {/* Right Column (Narrow) */}
       <div className="lg:col-span-4 space-y-6">
         
+        {/* Smart Insights */}
+        <div className="bg-white border border-[#c1c8c2] rounded-xl overflow-hidden">
+          <div className="p-4 border-b border-[#c1c8c2] bg-[#eef5f7] flex items-center justify-between">
+            <h2 className="font-title-md text-[#012d1d]">Smart Insights</h2>
+            <span className="material-symbols-outlined text-[#1b4332]">lightbulb</span>
+          </div>
+          <div className="p-4 space-y-3">
+            {insights.length > 0 ? insights.map((insight, i) => (
+              <div key={i} className="flex gap-2 items-start">
+                <span className="material-symbols-outlined text-[#386a20] text-[18px]">check_circle</span>
+                <p className="text-sm text-[#414844] leading-tight">{insight}</p>
+              </div>
+            )) : (
+              <p className="text-sm text-[#414844]">No insights generated yet.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Smart Inventory Widget */}
+        {inventory && (
+        <div className="bg-white border border-[#c1c8c2] rounded-xl overflow-hidden mt-6">
+          <div className="p-4 border-b border-[#c1c8c2] bg-[#eef5f7] flex items-center justify-between">
+            <h2 className="font-title-md text-[#012d1d]">Smart Inventory</h2>
+            <Link to="/inventory" className="text-sm text-[#1b4332] hover:underline">View All</Link>
+          </div>
+          <div className="p-4 space-y-3">
+            <div className="grid grid-cols-2 gap-2 text-sm text-[#414844] mb-4">
+              <div>Total Stock: <span className="font-bold text-[#012d1d]">{inventory.totalInventoryQuantity?.toFixed(2)} Q</span></div>
+              <div>Active Lots: <span className="font-bold text-[#012d1d]">{inventory.activeLotsCount}</span></div>
+              <div>Low Stock: <span className="font-bold text-red-600">{inventory.lowStockCount}</span></div>
+              <div>Slow Moving: <span className="font-bold text-orange-600">{inventory.slowMovingCount}</span></div>
+            </div>
+            <div className="border-t border-[#c1c8c2] pt-3">
+              <h3 className="font-semibold text-xs text-gray-500 mb-2 uppercase tracking-wide">Crop-wise Stock</h3>
+              {Object.entries(inventory.cropWiseStock || {}).slice(0, 4).map(([crop, qty]) => (
+                <div key={crop} className="flex justify-between items-center text-sm py-1 border-b border-gray-100 last:border-0">
+                  <span className="text-[#012d1d]">{crop}</span>
+                  <span className="font-data-mono font-medium">{qty?.toFixed(2)} Q</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        )}
+
         {/* Live Auction Activity */}
         <div className="bg-white border border-[#c1c8c2] rounded-xl overflow-hidden">
           <div className="p-4 border-b border-[#c1c8c2] bg-[#eef5f7] flex items-center justify-between">

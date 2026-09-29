@@ -8,6 +8,9 @@ const navLinks = [
   { to: '/my-produce', label: 'My Produce', icon: 'agriculture' },
   { to: '/lots', label: 'My Lots', icon: 'inventory_2' },
   { to: '/payments', label: 'Payments', icon: 'payments' },
+  { to: '/advanced-analytics', label: 'Analytics', icon: 'analytics' },
+  { to: '/inventory', label: 'Inventory', icon: 'inventory' },
+  { to: '/resources', label: 'Resources', icon: 'local_shipping' },
 ];
 
 export default function Navbar() {

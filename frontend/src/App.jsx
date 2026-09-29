@@ -20,7 +20,9 @@ import MyProducePage from './pages/MyProducePage';
 import PaymentsPage from './pages/PaymentsPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ProfilePage from './pages/ProfilePage';
-
+import AdvancedAnalyticsPage from './pages/AdvancedAnalyticsPage';
+import InventoryPage from './pages/InventoryPage';
+import ResourcesPage from './pages/ResourcesPage';
 function App() {
   return (
     <AuthProvider>
@@ -47,6 +49,9 @@ function App() {
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/advanced-analytics" element={<AdvancedAnalyticsPage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
           </Route>
           
           {/* Catch all */}
